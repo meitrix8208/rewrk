@@ -2,29 +2,18 @@
 
 FROM alpine:3.17.2 AS builder
 
-WORKDIR /compile
+WORKDIR /app
 
 RUN apk add --no-cache git build-base pkgconfig openssl-dev gcc musl-dev rust cargo
 
-# RUN rustup-init -t x86_64-unknown-linux-musl --profile minimal -y
-
 RUN git clone --depth 1 https://github.com/lnx-search/rewrk.git
 
-WORKDIR /compile/rewrk
+WORKDIR /app/rewrk
 
 RUN cargo build --release
 
-#! crear una imagen de alpine para ejecutar el binario
+WORKDIR /app/rewrk/target/release
+# copiar el binario a la imagen de alpine a mi computadora
+COPY /app/rewrk/target/release/rewrk C:/Users/maurr/workspace/docker/rewrk/src/:C:/Users/maurr/workspace/docker/rewrk/src/
 
-FROM alpine:3.17.2 AS runner
-
-WORKDIR /app
-
-RUN apk add --no-cache gcc 
-
-COPY --from=builder /compile/rewrk/target/release/rewrk /app/rewrk
-
-RUN chmod +x /app/rewrk
-
-# example ./rewrk -d 3s -h http://192.168.224.1:5000/api/users
-
+#docker run -it --rm -v C:/Users/maurr/workspace/docker/rewrk/src/:C:/Users/maurr/workspace/docker/rewrk/src/ rewrk-test
