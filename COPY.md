@@ -1,1 +1,3 @@
-# docker cp rewrk:/app/rewrk ./src/rewrk
+# docker run --rm -it --name rewrk-build rewrk
+
+## docker cp rewrk-build:/app/rewrk ./src/rewrk
