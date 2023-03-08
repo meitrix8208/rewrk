@@ -1,19 +1,25 @@
-#? crear un dockerfile con varias imagenes de alpine para cada paso clonar el repositorio https://github.com/lnx-search/rewrk y construir el binario con rust 
+#? crear un dockerfile con varias imágenes de alpine para cada paso clonar el repositorio https://github.com/lnx-search/rewrk y construir el binario con rust 
 
 FROM alpine:3.17.2 AS builder
 
-WORKDIR /app
+WORKDIR /compile
+# gcc
+RUN apk add --no-cache git build-base pkgconfig musl-dev curl openssl-dev 
 
-RUN apk add --no-cache git build-base pkgconfig openssl-dev gcc musl-dev rust cargo
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustup target add x86_64-unknown-linux-musl
 
 RUN git clone --depth 1 https://github.com/lnx-search/rewrk.git
 
-WORKDIR /app/rewrk
+WORKDIR /compile/rewrk
 
-RUN cargo build --release
+RUN cargo build --target x86_64-unknown-linux-musl --release
 
-WORKDIR /app/rewrk/target/release
-# copiar el binario a la imagen de alpine a mi computadora
-COPY /app/rewrk/target/release/rewrk C:/Users/maurr/workspace/docker/rewrk/src/:C:/Users/maurr/workspace/docker/rewrk/src/
+FROM alpine:3.17.2 AS runner
 
-#docker run -it --rm -v C:/Users/maurr/workspace/docker/rewrk/src/:C:/Users/maurr/workspace/docker/rewrk/src/ rewrk-test
+WORKDIR /app
+
+COPY --from=builder /compile/rewrk/target/x86_64-unknown-linux-musl/release/rewrk /app/rewrk
