@@ -1,4 +1,4 @@
-#? crear un dockerfile con varias imagenes de alpine para cada paso clonar el repositorio https://github.com/lnx-search/rewrk y construir el binario con rust 
+#? crear un dockerfile con varias imágenes de alpine para cada paso clonar el repositorio https://github.com/lnx-search/rewrk y construir el binario con rust 
 
 FROM alpine:3.17.2 AS builder
 
