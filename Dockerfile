@@ -22,4 +22,4 @@ FROM alpine:3.17.2 AS runner
 
 WORKDIR /app
 
-COPY --from=builder /compile/rewrk/target/x86_64-unknown-linux-musl/release/rewrk /app/rewrk
+COPY --from=builder /compile/rewrk/target/x86_64-unknown-linux-musl/release/rewrk /app/rewrk-t
