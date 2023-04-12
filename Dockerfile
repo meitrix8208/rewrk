@@ -1,6 +1,6 @@
 #? crear un dockerfile con varias imágenes de alpine para cada paso clonar el repositorio https://github.com/lnx-search/rewrk y construir el binario con rust 
 
-FROM alpine:3.17.2 AS builder
+FROM alpine:3.17.3 AS builder
 
 WORKDIR /compile
 # gcc
@@ -22,4 +22,4 @@ FROM alpine:3.17.2 AS runner
 
 WORKDIR /app
 
-COPY --from=builder /compile/rewrk/target/x86_64-unknown-linux-musl/release/rewrk /app/rewrk-t
+COPY --from=builder /compile/rewrk/target/x86_64-unknown-linux-musl/release/rewrk /app/rewrk
