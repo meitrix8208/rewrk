@@ -1,4 +1,4 @@
-FROM alpine:3.18.3 AS builder
+FROM alpine:3.19.0 AS builder
 
 RUN apk add --no-cache git build-base pkgconfig openssl-dev gcc musl-dev rust cargo
 
@@ -8,7 +8,9 @@ WORKDIR /rewrk
 
 RUN cargo build --release
 
-FROM alpine:3.18.3 AS runner
+RUN strip target/release/rewrk
+
+FROM alpine:3.19.0 AS runner
 
 RUN apk add --no-cache libgcc ca-certificates
 
