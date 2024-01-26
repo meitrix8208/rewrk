@@ -1,6 +1,6 @@
-FROM alpine:3.18.3 AS builder
+FROM alpine:3.19.0 AS builder
 
-RUN apk add --no-cache git build-base pkgconfig musl-dev curl openssl-dev 
+RUN apk add --no-cache git build-base pkgconfig musl-dev curl libressl-dev
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 
@@ -14,7 +14,9 @@ WORKDIR /rewrk
 
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
-FROM alpine:3.18.3 AS runner
+RUN strip target/x86_64-unknown-linux-musl/release/rewrk
+
+FROM alpine:3.19.0 AS runner
 
 RUN apk add --no-cache ca-certificates
 
