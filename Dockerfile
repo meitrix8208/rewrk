@@ -10,7 +10,7 @@ RUN cargo build --release
 
 RUN strip target/release/rewrk
 
-FROM alpine:3.19.0 AS runner
+FROM meitrix8208/alpinex:lite AS runner
 
 RUN apk add --no-cache libgcc ca-certificates
 
