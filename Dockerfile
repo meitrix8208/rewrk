@@ -1,8 +1,8 @@
-FROM alpine:3.20.1 AS builder
+FROM alpine:3.20 AS builder
 
 RUN apk add --no-cache git build-base pkgconfig musl-dev curl libressl-dev
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal
 
 ENV PATH="/root/.cargo/bin:${PATH}"
 
@@ -16,7 +16,7 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 
 RUN strip target/x86_64-unknown-linux-musl/release/rewrk
 
-FROM alpine:3.20.1 AS runner
+FROM alpine:3.20 AS runner
 
 RUN apk add --no-cache ca-certificates
 
