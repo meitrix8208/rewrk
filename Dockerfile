@@ -1,4 +1,4 @@
-FROM alpine:3.20 AS builder
+FROM alpine:3.21.3 AS builder
 
 RUN apk add --no-cache git build-base pkgconfig musl-dev curl libressl-dev
 
@@ -16,7 +16,7 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 
 RUN strip target/x86_64-unknown-linux-musl/release/rewrk
 
-FROM alpine:3.20 AS runner
+FROM alpine:3.21.3 AS runner
 
 RUN apk add --no-cache ca-certificates
 
